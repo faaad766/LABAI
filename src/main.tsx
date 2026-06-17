@@ -9,9 +9,19 @@ Sentry.init({
   environment: import.meta.env.MODE,
 });
 
+function getAnonymousVisitorId(): string {
+  const key = 'labai_visitor_id';
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = 'anon-' + crypto.randomUUID();
+    localStorage.setItem(key, id);
+  }
+  return id;
+}
+
 pendo.initialize({
   visitor: {
-    id: ''
+    id: getAnonymousVisitorId()
   }
 });
 
