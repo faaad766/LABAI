@@ -59,9 +59,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     pendo.pageLoad();
   }, []);
 
-  // Fire the initial page load so the landing screen is counted
+  // Fire the initial page load and listen for browser back/forward navigation
   useEffect(() => {
     pendo.pageLoad();
+
+    const onPopState = () => pendo.pageLoad();
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
   const selectSubject = useCallback((id: SubjectId) => {
